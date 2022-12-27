@@ -1,2 +1,2 @@
 # FinanceCode
-Python project script that back test strategy on Seeking Alpha which buys SPY at the end of each month and sells after three days later. This claims to have a 7% year-to-date gain versus a loss of 18.1% for buying and holding.
+Python project script that back test strategy on Seeking Alpha which simulates a buys SPY at the end of each month and sells after three days later. This claims to have a 7% year-to-date gain versus a loss of 18.1% for buying and holding.
