@@ -10,7 +10,7 @@ doc = BeautifulSoup(result.text, "html.parser")
 
 price = doc.find_all("fin-streamer")[18]
 
-print("Current SPY price: ",price.string)
+print("Current SPY price: $",price.string)
 
 year = int(input("Enter year: "))
 month = int(input("Enter month: "))
@@ -64,12 +64,14 @@ if input_dt.date() == tdl:
     Selling_prices = [Sell_price+"\n"]
     file1.write(Selling_prices)
     file1.close()
-    
+
+initialinvestment = 0    
 
 with open("BuyingSpyPriceEOM.txt") as b:
     list1 = [x for x in b.read().split('\n')]
     print("Bought prices for SPY at the end of the months: ",list1)
-
+initialinvestment= float(list1[0]) * 10 #the price for buying 10 shares of SPY
+print("Starting amount: $",initialinvestment)
 
 with open("SellingSpyPriceTDA.txt") as s:
     list2 = [y for y in s.read().split('\n')]
@@ -79,6 +81,17 @@ difference =[]
 for i,j in zip(list1,list2):
         difference.append(float(j)-float(i))
 
-print("Difference: ",difference)
 
-print("Your net profit on SPY: ",sum(difference))
+print("Your net profit on SPY for 10 shares: $",sum(difference))
+
+
+print("Current amount: $",float(initialinvestment) + (sum(difference))*10)
+
+percentage = (((sum(difference))*10)/initialinvestment)* 100
+
+if (sum(difference))*10 > 0:
+    print("Your are up {0}%".format(percentage))
+if (sum(difference))*10 < 0:
+    print("Your are down {0}%".format(percentage))
+
+
