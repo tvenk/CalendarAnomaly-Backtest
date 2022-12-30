@@ -8,9 +8,16 @@ result = requests.get(url)
 
 doc = BeautifulSoup(result.text, "html.parser")
 
-price = doc.find_all("fin-streamer")[18]
+Current_price = ""
 
-print("Current SPY price: $",price.string)
+tags = doc.find_all("fin-streamer")
+
+for tag in tags:
+    if tag["data-symbol"] == "SPY":
+        Current_price = tag["value"]
+        break
+
+print("Current SPY price: $",Current_price)
 
 year = int(input("Enter year: "))
 month = int(input("Enter month: "))
@@ -31,9 +38,14 @@ if input_dt.date() == res.date():
 
     doc = BeautifulSoup(result.text, "html.parser")
 
-    price = doc.find_all("fin-streamer")[18]
+    Buy_price = ""
 
-    Buy_price = price.string
+    tags = doc.find_all("fin-streamer")
+
+    for tag in tags:
+        if tag["data-symbol"] == "SPY":
+             Buy_price = tag["value"]
+             break
 
     print("Buying SPY price: ",Buy_price)
 
@@ -45,18 +57,26 @@ if input_dt.date() == res.date():
 endofmonth_date = res.date()
 
 tdl = endofmonth_date + timedelta(3)
+
 print("Three days later from the end of the month:", tdl)
 
+
 if input_dt.date() == tdl:
+
     url ="https://finance.yahoo.com/quote/SPY/"
 
     result = requests.get(url)
 
     doc = BeautifulSoup(result.text, "html.parser")
 
-    price = doc.find_all("fin-streamer")[18]
+    Sell_price = ""
 
-    Sell_price = price.string
+    tags = doc.find_all("fin-streamer")
+
+    for tag in tags:
+        if tag["data-symbol"] == "SPY":
+             Sell_price = tag["value"]
+             break
 
     print("Selling SPY price: ",Sell_price)
 
