@@ -1,6 +1,39 @@
 from bs4 import BeautifulSoup
 import requests
 from datetime import datetime, timedelta
+import re
+
+
+_12num = ""
+def check_for_12_numbers(file_path):
+    global _12num
+    # Read the file content
+    with open(file_path) as b:
+        listnum = [x for x in b.read().split('\n')]
+        if '' in listnum:
+            listnum.remove('')
+
+    # Check if there are exactly 12 numbers
+        if len(listnum) == 12:
+            _12num = True
+        else:
+            _12num = False
+
+# Path to the note.txt file
+file_path = 'BuyingSpyPriceEOM.txt'
+
+# Check the file
+check_for_12_numbers(file_path)
+_12numinbuy = _12num
+
+
+# Path to the note.txt file
+file_path = 'SellingSpyPriceTDA.txt'
+
+# Check the file
+check_for_12_numbers(file_path)
+_12numinsell = _12num
+
 
 url ="https://finance.yahoo.com/quote/SPY/"
 
@@ -12,10 +45,9 @@ Current_price = ""
 
 tags = doc.find_all("fin-streamer")
 
-for tag in tags:
-    if tag["data-symbol"] == "SPY":
-        Current_price = tag["value"]
-        break
+for tag in tags[2]:
+    Current_price = tag.text
+    break
 
 print("CALENDAR ANOMALY")
 print("Current SPY price: $",Current_price)
@@ -32,7 +64,7 @@ next_month = input_dt.replace(day=28) + timedelta(days=4)
 res = next_month - timedelta(days=next_month.day)
 print("Last date of month is:", res.date())
 
-if input_dt.date() == res.date():
+if input_dt.date() == res.date() and _12numinbuy == False:
     url ="https://finance.yahoo.com/quote/SPY/"
 
     result = requests.get(url)
@@ -43,10 +75,9 @@ if input_dt.date() == res.date():
 
     tags = doc.find_all("fin-streamer")
 
-    for tag in tags:
-        if tag["data-symbol"] == "SPY":
-             Buy_price = tag["value"]
-             break
+    for tag in tags[2]:
+        Buy_price = tag.text
+        break
 
     print("Buying SPY price per share: ",Buy_price)
 
@@ -78,7 +109,7 @@ print("Three days after the last date of previous month is:",tdl)
 
 
 
-if input_dt.date() == tdl:
+if input_dt.date() == tdl and _12numinsell == False:
 
     url ="https://finance.yahoo.com/quote/SPY/"
 
@@ -90,10 +121,9 @@ if input_dt.date() == tdl:
 
     tags = doc.find_all("fin-streamer")
 
-    for tag in tags:
-        if tag["data-symbol"] == "SPY":
-             Sell_price = tag["value"]
-             break
+    for tag in tags[2]:
+        Sell_price = tag.text
+        break
 
     print("Selling SPY price per share: ",Sell_price)
 
